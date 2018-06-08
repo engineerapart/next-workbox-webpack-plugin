@@ -22,10 +22,11 @@ const defaultConfig = {
   precacheManifest: true,
   removeDir: true,
   buildId: null,
-	uniqueId: false,
-	// dedicated path and url, must be under static in next.js to export and refer to it
-	swDestRoot: './static/workbox',
-	swURLRoot: '/static/workbox'
+  uniqueId: false,
+  // dedicated path and url, must be under static in next.js to export and refer to it
+  swDestRoot: './static/workbox',
+  swURLRoot: '/static/workbox',
+  cdnRoot: '',
 }
 
 class NextWorkboxWebpackPlugin {
@@ -36,9 +37,10 @@ class NextWorkboxWebpackPlugin {
       precacheManifest,
       removeDir,
       buildId,
-			uniqueId,
-			swDestRoot,
-			swURLRoot,
+      uniqueId,
+      swDestRoot,
+      swURLRoot,
+      cdnRoot,
       ...swConfig
     } = {
       ...defaultConfig,
@@ -54,7 +56,8 @@ class NextWorkboxWebpackPlugin {
       removeDir,
       buildId,
       swDestRoot,
-      swURLRoot
+      swURLRoot,
+      cdnRoot
     }
 
     // build id come from next.js is exist
@@ -78,7 +81,7 @@ class NextWorkboxWebpackPlugin {
         throw e
       }
     } else {
-			await fs.ensureDir(swDestRoot)
+      await fs.ensureDir(swDestRoot)
       return getModuleUrl('workbox-sw')
     }
   }
@@ -86,19 +89,19 @@ class NextWorkboxWebpackPlugin {
   globPrecacheManifest({distDir, buildId}) {
     const precacheQuery = [{
       src: `${distDir}/bundles/pages`,
-      route: f => `/_next/${buildId}/page/${f}`,
+      route: f => `${cdnRoot}/_next/${buildId}/page/${f}`,
       filter: f => (/.js$/).test(f)
     }, {
       src: `${distDir}/static/commons`, // next 6.0 => commons chunks and build manifest.
-      route: f => `/_next/static/commons/${f}`,
+      route: f => `${cdnRoot}/_next/static/commons/${f}`,
       filter: f => (/.js$/).test(f)
     }, {
       src: `${distDir}/chunks`,
-      route: f => `/_next/webpack/chunks/${f}`,
+      route: f => `${cdnRoot}/_next/webpack/chunks/${f}`,
       filter: f => (/.js$/).test(f)
     }, {
       src: `${distDir}`,
-      route: f => `/_next/${md5File(`${distDir}/app.js`)}/app.js`,
+      route: f => `${cdnRoot}/_next/${md5File(`${distDir}/app.js`)}/app.js`,
       filter: f => f === 'app.js'
     }]
 
@@ -116,14 +119,22 @@ class NextWorkboxWebpackPlugin {
     const context = `self.__precacheManifest = ${JSON.stringify(manifest)}`
     const output = `next-precache-manifest-${hash(context)}.js`
 
+    const manifestFile = `manifest-id.json`;
+    const precacheManifest = {
+      precacheManifest: path.join(swDestRoot, output),
+    };
+
     // dump out precached manifest for next pages, chunks
     fs.writeFileSync(path.join(swDestRoot, output), context)
+
+    // store the path that was generated in manifest.json for runtime clients to know which file was generated
+    fs.writeFileSync(path.join(swDestRoot, manifestFile), JSON.stringify(precacheManifest))
 
     return `${swURLRoot}/${output}`
   }
 
   async generateSW(swDest, swConfig) {
-		const {swString} = await generateSWString(swConfig)
+    const {swString} = await generateSWString(swConfig)
     fs.writeFileSync(swDest, swString)
   }
 
