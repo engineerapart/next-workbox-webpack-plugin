@@ -1,19 +1,19 @@
-const NextWorkboxWebpackPlugin = require('../../index')
+const NextWorkboxWebpackPlugin = require('../../index');
 
 module.exports = {
-  webpack: (config, {isServer, dev, buildId, config: {distDir}}) => {
+  webpack: (config, {
+    isServer, dev, buildId, config: { distDir },
+  }) => {
     if (!isServer && !dev) {
       config.plugins.push(new NextWorkboxWebpackPlugin({
         distDir,
-        buildId
-      }))
+        buildId,
+      }));
     }
 
-    return config
+    return config;
   },
-  exportPathMap: () => {
-    return {
-      '/': { page: '/' }
-    }
-  }
-}
+  exportPathMap: () => ({
+    '/': { page: '/' },
+  }),
+};

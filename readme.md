@@ -16,6 +16,8 @@ $ npm install @engineerapart/next-workbox-webpack-plugin
 const nextWorkboxWebpackPlugin = require('@engineerapart/next-workbox-webpack-plugin');
 
 nextWorkboxWebpackPlugin({
+	// Should debug mode be forced? If true, this will set workbox.setConfig({ debug: true }); in the service worker
+	debug: false,
   // must, you can get it at time time of Next.js compiling
   buildId: '6c071eb6-ab01-47bc-8074-71057afc1f64',
   // optional, next.js dist path as compiling. most of cases you don't need to fix it.
@@ -37,7 +39,11 @@ nextWorkboxWebpackPlugin({
 	// if cdnRoot = 'https://yourpage.com', then the URLs generated look like:
 	// https://yourpage.com/_next/7b3a3428-687c-43cb-a835-164b6550c593/page/index.js
 	cdnRoot: '',
-  // optional, you can use workbox-build options. except swDest because of output location is fixed in 'static/workbox'
+	// optional, you can use workbox-build options. swDest will be forced to use the basename, e.g. if you provide
+	// /some/path/sw.js only `sw.js` will be used, and placed in swDestRoot.
+	// All workbox-build config options that are not specified above will be passed through to workbox-build.
+	// For all available options, please see
+	// https://developers.google.com/web/tools/workbox/modules/workbox-build#generateswstring_mode
   ...WorkboxBuildOptions,
 });
 ```
