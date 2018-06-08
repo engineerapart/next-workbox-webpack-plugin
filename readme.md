@@ -7,13 +7,13 @@
 ## Install
 
 ```
-$ npm install next-workbox-webpack-plugin
+$ npm install @engineerapart/next-workbox-webpack-plugin
 ```
 
 ## Usage
 
 ```js
-const nextWorkboxWebpackPlugin = require('next-workbox-webpack-plugin');
+const nextWorkboxWebpackPlugin = require('@engineerapart/next-workbox-webpack-plugin');
 
 nextWorkboxWebpackPlugin({
   // must, you can get it at time time of Next.js compiling
@@ -41,7 +41,7 @@ nextWorkboxWebpackPlugin({
 ## Usage in next.config.js
 
 ```
-const NextWorkboxWebpackPlugin = require('next-workbox-webpack-plugin');
+const NextWorkboxWebpackPlugin = require('@engineerapart/next-workbox-webpack-plugin');
 
 module.exports = {
   webpack: (config, {isServer, dev, buildId, config: {distDir}}) => {
@@ -64,7 +64,7 @@ module.exports = {
 For Next.js, It contains some of restrictions:
 
 - Only works in `not dev mode` and on `the custom server` which means you can't test with `next` and `next start`
-- You need customized server for serving service worker scripts and workbox libraries. For your convenience, [test server is in this package](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/bin/next-workbox-start.js).
+- You need customized server for serving service worker scripts and workbox libraries. For your convenience, [test server is in this package](https://github.com/engineerapart/next-workbox-webpack-plugin/blob/master/bin/next-workbox-start.js).
 - All of files will be generated in `static/workbox` because of exporting. You might need to add the path to gitignore.
 ```
 static/workbox
@@ -75,14 +75,15 @@ static/workbox
     ├── ...
     ├── workbox-sw.js
 ```
-- You have to [add register service worker script](https://github.com/ragingwind/next-workbox-webpack-plugin/blob/master/examples/hello-pwa/pages/index.js) into part of your application
+- You have to [add register service worker script](https://github.com/engineerapart/next-workbox-webpack-plugin/blob/master/examples/hello-pwa/pages/index.js) into part of your application
 - For more information, please refer to test and [Get Started With Workbox For Webpack](https://goo.gl/BFQxuo)
 
 ### Examples
 
-- [Hello PWA](https://github.com/ragingwind/next-workbox-webpack-plugin/tree/master/examples/hello-pwa): You can learn how to use the webpack plugin basically
-- [HNPWA](https://github.com/ragingwind/next-workbox-webpack-plugin/tree/master/examples/hnpwa): Simple HNPWA apps with Next.js
+- [Hello PWA](https://github.com/engineerapart/next-workbox-webpack-plugin/tree/master/examples/hello-pwa): You can learn how to use the webpack plugin basically
+- [HNPWA](https://github.com/engineerapart/next-workbox-webpack-plugin/tree/master/examples/hnpwa): Simple HNPWA apps with Next.js
 
 ## License
 
 MIT © [Jimmy Moon](https://ragingwind.me)
+MIT © [EngineerApart, LLC](https://engineerapart.com)
