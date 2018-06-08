@@ -1,6 +1,6 @@
 {
   "name": "@engineerapart/next-workbox-webpack-plugin",
-  "version": "1.1.7",
+  "version": "1.1.8",
   "description": "Webpack plugin for next with workbox",
   "license": "MIT",
   "repository": "https://github.com/engineerapart/next-workbox-webpack-plugin",
@@ -28,6 +28,7 @@
   ],
   "dependencies": {
     "find-up": "^2.1.0",
+    "klaw-sync": "^4.0.0",
     "md5-file": "^3.2.3",
     "workbox-build": "^3.2.0"
   },

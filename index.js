@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs-extra')
+const klawSync = require('klaw-sync')
 const crypto = require('crypto')
 const md5File = require('md5-file/promise').sync
 const findUp = require('find-up')
@@ -87,10 +88,13 @@ class NextWorkboxWebpackPlugin {
   }
 
   globPrecacheManifest({distDir, buildId, cdnRoot}) {
+		// This may need to change to use the {url,revision} format:
+		// https://developers.google.com/web/tools/workbox/modules/workbox-precaching#explanation_of_the_precache_list
     const precacheQuery = [{
       src: `${distDir}/bundles/pages`,
-      route: f => `${cdnRoot}/_next/${buildId}/page/${f}`,
-      filter: f => (/.js$/).test(f)
+      route: f => `${cdnRoot}/_next/${buildId}/page${f}`,
+			filter: f => (/.js$/).test(f),
+			recurse: true
     }, {
       src: `${distDir}/static/commons`, // next 6.0 => commons chunks and build manifest.
       route: f => `${cdnRoot}/_next/static/commons/${f}`,
@@ -107,9 +111,20 @@ class NextWorkboxWebpackPlugin {
 
     return Promise.all(precacheQuery.map(query => {
       return new Promise(resolve => {
-        fs.readdir(query.src, (err, files = []) => {
-          resolve(files.filter(query.filter).map(f => query.route(f)))
-        })
+				// For these entries, we deep-recurse the dir, get all the files,
+				// strip off the origin path to get the local path and filename,
+				// then generate their route
+				if (query.recurse) {
+					const entries = klawSync(query.src, { nodir: true })
+						.map((e) => e.path)
+						.filter(query.filter)
+						.map((e) => query.route(e.replace(query.src, '')))
+					resolve(entries)
+				} else {
+					fs.readdir(query.src, (err, files = []) => {
+						resolve(files.filter(query.filter).map(f => query.route(f)))
+					})
+				}
       })
     })).then(files => files.reduce((c, p) => c.concat(p), []))
   }
