@@ -88,7 +88,7 @@ class NextWorkboxWebpackPlugin {
     }
   }
 
-  globPrecacheManifest({ distDir, buildId, cdnRoot }) {
+  globPrecacheManifest({ distDir, buildId, cdnRoot }, concatEntries = []) {
     // This may need to change to use the {url,revision} format:
     // https://developers.google.com/web/tools/workbox/modules/workbox-precaching#explanation_of_the_precache_list
     const precacheQuery = [{
@@ -125,19 +125,22 @@ class NextWorkboxWebpackPlugin {
           resolve(files.filter(query.filter).map(f => query.route(f)));
         });
       }
-    }))).then(files => files.reduce((c, p) => c.concat(p), []));
+		})))
+		.then(files => files.reduce((c, p) => c.concat(p), []))
+		.then((files) => files.concat(concatEntries));
   }
 
   // TODO: Generalize the import script builder to combine all settings and save in one go,
   // instead of repeating code.
-  async importPrecacheManifest({ swDestRoot, swURLRoot, debug }) {
-    const debugEntry = debug ? 'workbox.setConfig({ debug: true });\n' : '';
-    const manifest = await this.globPrecacheManifest(this.options);
+  async importPrecacheManifest({ swDestRoot, swURLRoot, debug, precacheManifest }) {
+		const debugEntry = debug ? 'workbox.setConfig({ debug: true });\n' : '';
+		const concatEntries = (Array.isArray(precacheManifest)) ? precacheManifest : [];
+		const manifest = await this.globPrecacheManifest(this.options, concatEntries);
     const content = `${debugEntry}self.__precacheManifest = ${JSON.stringify(manifest)}`;
     const output = `next-precache-manifest-${hash(content)}.js`;
 
     const manifestFile = 'manifest-id.json';
-    const precacheManifest = {
+    const precacheManifestId = {
       precacheManifest: path.join(swDestRoot, output),
     };
 
@@ -145,7 +148,7 @@ class NextWorkboxWebpackPlugin {
     fs.writeFileSync(path.join(swDestRoot, output), content);
 
     // store the path that was generated in manifest.json for runtime clients to know which file was generated
-    fs.writeFileSync(path.join(swDestRoot, manifestFile), JSON.stringify(precacheManifest));
+    fs.writeFileSync(path.join(swDestRoot, manifestFile), JSON.stringify(precacheManifestId));
 
     return `${swURLRoot}/${output}`;
   }

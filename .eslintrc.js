@@ -13,5 +13,6 @@ module.exports = {
 		'max-len': ['error', { code: 140, ignoreUrls: true }],
 		indent: ['error', 2, { SwitchCase: 1 }],
 		'class-methods-use-this': 0,
+		'object-curly-newline', 0
 	},
 };
