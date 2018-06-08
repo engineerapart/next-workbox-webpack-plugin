@@ -86,7 +86,7 @@ class NextWorkboxWebpackPlugin {
     }
   }
 
-  globPrecacheManifest({distDir, buildId}) {
+  globPrecacheManifest({distDir, buildId, cdnRoot}) {
     const precacheQuery = [{
       src: `${distDir}/bundles/pages`,
       route: f => `${cdnRoot}/_next/${buildId}/page/${f}`,
