@@ -1,39 +1,39 @@
 {
-	"name": "@engineerapart/next-workbox-webpack-plugin",
-	"version": "1.1.1",
-	"description": "Webpack plugin for next with workbox",
-	"license": "MIT",
-	"repository": "https://github.com/engineerapart/next-workbox-webpack-plugin",
-	"author": {
-		"name": "Engineer Apart",
-		"email": "info@engineerapart.com",
-		"url": "https://engineerapart.com"
-	},
-	"engines": {
-		"node": ">=8.4"
-	},
-	"files": [
-		"index.js",
-		"bin"
-	],
-	"bin": {
-		"next-workbox-start": "bin/next-workbox-start.js"
-	},
-	"keywords": [
-		"next",
-		"next-workbox",
-		"workbox",
-		"pwa",
-		"progressive web app"
-	],
-	"dependencies": {
-		"find-up": "^2.1.0",
-		"md5-file": "^3.2.3",
-		"workbox-build": "^3.2.0"
-	},
-	"peerDependencies": {
-		"next": "^5.0.0",
-		"react": "^16.2.0",
-		"react-dom": "^16.2.0"
-	}
+  "name": "@engineerapart/next-workbox-webpack-plugin",
+  "version": "1.1.1",
+  "description": "Webpack plugin for next with workbox",
+  "license": "MIT",
+  "repository": "https://github.com/engineerapart/next-workbox-webpack-plugin",
+  "author": {
+    "name": "Engineer Apart",
+    "email": "info@engineerapart.com",
+    "url": "https://engineerapart.com"
+  },
+  "engines": {
+    "node": ">=8.4"
+  },
+  "files": [
+    "index.js",
+    "bin"
+  ],
+  "bin": {
+    "next-workbox-start": "bin/next-workbox-start.js"
+  },
+  "keywords": [
+    "next",
+    "next-workbox",
+    "workbox",
+    "pwa",
+    "progressive web app"
+  ],
+  "dependencies": {
+    "find-up": "^2.1.0",
+    "md5-file": "^3.2.3",
+    "workbox-build": "^3.2.0"
+  },
+  "peerDependencies": {
+    "next": "^5.0.0",
+    "react": "^16.2.0",
+    "react-dom": "^16.2.0"
+  }
 }
