@@ -89,6 +89,10 @@ class NextWorkboxWebpackPlugin {
       route: f => `/_next/${buildId}/page/${f}`,
       filter: f => (/.js$/).test(f)
     }, {
+      src: `${distDir}/static/commons`, // next 6.0 => commons chunks and build manifest.
+      route: f => `/_next/static/commons/${f}`,
+      filter: f => (/.js$/).test(f)
+    }, {
       src: `${distDir}/chunks`,
       route: f => `/_next/webpack/chunks/${f}`,
       filter: f => (/.js$/).test(f)
