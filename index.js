@@ -22,7 +22,10 @@ const defaultConfig = {
   precacheManifest: true,
   removeDir: true,
   buildId: null,
-  uniqueId: false
+	uniqueId: false,
+	// dedicated path and url, must be under static in next.js to export and refer to it
+	swDestRoot: './static/workbox',
+	swURLRoot: '/static/workbox'
 }
 
 class NextWorkboxWebpackPlugin {
@@ -33,7 +36,9 @@ class NextWorkboxWebpackPlugin {
       precacheManifest,
       removeDir,
       buildId,
-      uniqueId,
+			uniqueId,
+			swDestRoot,
+			swURLRoot,
       ...swConfig
     } = {
       ...defaultConfig,
@@ -48,14 +53,13 @@ class NextWorkboxWebpackPlugin {
       precacheManifest,
       removeDir,
       buildId,
-      // dedicated path and url, must be under static in next.js to export and refer to it
-      swDestRoot: './static/workbox',
-      swURLRoot: '/static/workbox'
+      swDestRoot,
+      swURLRoot
     }
 
     // build id come from next.js is exist
     if (!this.options.buildId) {
-      throw 'Build id from next.js must be exist'
+      throw 'Build id from next.js must exist. This is only generated in production Next builds (NODE_ENV=production)'
     }
 
     // clean up previous builts
@@ -74,6 +78,7 @@ class NextWorkboxWebpackPlugin {
         throw e
       }
     } else {
+			await fs.ensureDir(swDestRoot)
       return getModuleUrl('workbox-sw')
     }
   }
