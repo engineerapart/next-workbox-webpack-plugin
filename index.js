@@ -198,21 +198,26 @@ class NextWorkboxWebpackPlugin {
 			try {
 				const { swDest, ...swConfig } = this.swConfig;
 
+				const useConfig = {
+					...swConfig,
+					importScripts: [...(swConfig.importScripts || [])],
+				}
+
 				// unshift workbox libs to the top of scripts
-				swConfig.importScripts.unshift(await this.importWorkboxLibraries(this.options));
+				useConfig.importScripts.unshift(await this.importWorkboxLibraries(this.options));
 
 				// push precached manifest to end of scripts
 				if (this.options.precacheManifest) {
-					swConfig.importScripts.push(await this.importPrecacheManifest(this.options));
+					useConfig.importScripts.push(await this.importPrecacheManifest(this.options));
 				} else {
 					// Generate any custom imports required
 					const customImports = await this.generateImportScripts(this.options);
 					if (customImports) {
-						swConfig.importScripts.push(customImports);
+						useConfig.importScripts.push(customImports);
 					}
 				}
 
-				await this.generateSW(path.join(this.options.swDestRoot, swDest), swConfig);
+				await this.generateSW(path.join(this.options.swDestRoot, swDest), useConfig);
 			} catch (e) {
 				console.error('Error generating service worker with workbox-build:', e); // eslint-disable-line no-console
 				throw e;
