@@ -1,3 +1,6 @@
+# DEPRECATION NOTICE
+With the release of Next 7, the guts of how packages are managed is very very different. Rather than continue to maintain this, I have made the jump to [next-offline](https://github.com/hanford/next-offline) and recommend you do the same - it correctly handles the webpack chunk data structures. It is not as featureful but for my use cases, it does everything I needed.
+
 # next-workbox-webpack-plugin
 
 > Webpack plugin with workbox, it helps you build a Progressive Web App powered by Next.js. Generating service worker scripts and precache manifest of Next.js's pages and chunks.
